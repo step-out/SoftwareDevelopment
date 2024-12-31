@@ -5,7 +5,7 @@ import {
   Footer, Main, Menu, Submenu, MenuItem,
   Card, Row, Col, Avatar, Carousel,
   CarouselItem, Table, TableColumn, Pagination, Dialog,
-  Divider, InfiniteScroll
+  Divider, InfiniteScroll, Empty
 } from 'element-ui'
 
 Vue.use(Button)
@@ -33,3 +33,4 @@ Vue.use(Pagination)
 Vue.use(Dialog)
 Vue.use(Divider)
 Vue.use(InfiniteScroll)
+Vue.use(Empty)
