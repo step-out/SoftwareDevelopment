@@ -47,8 +47,9 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item class="btns">
-                        <el-button type="primary" @click="login">登录</el-button>
+                        <el-button type="primary" @click="login">登录（用户）</el-button>
                         <el-button type="info" @click="reset">重置</el-button>
+                        <el-button type="info" @click="login_admin">登录（管理员）</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -140,12 +141,12 @@ export default {
     login () {
       // 表单的数据进行验证，函数返回值为true则进行登录请求
       this.$refs.loginFormRef.validate(async valid => {
-        if (!valid) return
-        // 请求返回数据中的data重命名为res，通过res中的status判断是否登录成功
-        const res = await this.$http.post('login', this.loginForm)
-        if (res.data.status !== 200) return this.$message.error(res.data.message)
-        this.$message.success('登录成功！')
-        window.sessionStorage.setItem('token', res.data.token)
+        // if (!valid) return
+        // // 请求返回数据中的data重命名为res，通过res中的status判断是否登录成功
+        // const res = await this.$http.post('login', this.loginForm)
+        // if (res.data.status !== 200) return this.$message.error(res.data.message)
+        // this.$message.success('登录成功！')
+        // window.sessionStorage.setItem('token', res.data.token)
         this.$router.push('/welcome')
       })
     },
@@ -166,6 +167,9 @@ export default {
     // 重置表单
     reset () {
       this.$refs.loginFormRef.resetFields()
+    },
+    login_admin () {
+      this.$router.push('/manage')
     }
   }
 }
