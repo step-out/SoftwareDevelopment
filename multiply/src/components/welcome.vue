@@ -8,7 +8,7 @@
         <div class="content">
             <div>
               <el-menu class="el-menu-demo" mode="horizontal" :router='true' :default-active="activePath">
-                <el-menu-item v-for="item in menuList" :index="'/' + item.path"
+                <el-menu-item v-for="item in menuList" :index="'/' + item.path  + '/' + $route.params.user"
                 :key="item.id" @click="saveNavState('/' + item.path)">
                   <span>{{item.serve_name}}</span>
                 </el-menu-item>
@@ -55,7 +55,7 @@ export default {
       this.activePath = activePath
     },
     user () {
-      this.$router.push('/usercenter')
+      this.$router.push('/usercenter' + this.$route.params.user)
     }
   }
 }
