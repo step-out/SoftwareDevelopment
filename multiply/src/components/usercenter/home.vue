@@ -17,23 +17,28 @@
         <div class="toggle-button" @click="toggleCollaspe">|||</div>
         <el-menu unique-opened background-color="#333744" text-color="#fff" active-text-color="#409eff"
           :collapse="isCollapse" :collapse-transition="false" :router='true'>
-          <!-- 一级菜单 -->
-          <el-submenu :index="item.id + ''" v-for="item in menulist" :key="item.id">
-            <!-- 一级菜单模板区 -->
+          <el-menu-item index="/userinfo">
+            <i class="el-icon-s-custom"></i>
+            <span>个人信息</span>
+          </el-menu-item>
+          <el-submenu index="/">
             <template slot="title">
-              <i :class="iconsObj[item.id]"></i>
-              <span>{{ item.authName }}</span>
+              <i class="el-icon-document"></i>
+              <span>发帖管理</span>
             </template>
-            <!-- 二级菜单 -->
-            <el-menu-item :index="'/' + subItem.path + '/' + $route.params.user + '/' + subItem.id" v-for="subItem in item.children" :key="subItem.id">
-              <i class="el-icon-menu"></i>
-              <span>{{ subItem.authName }}</span>
-            </el-menu-item>
+              <el-menu-item index="/postedsecond">
+                <i class="el-icon-menu"></i>
+                <span>二手交易</span>
+              </el-menu-item>
+              <el-menu-item index="/postedhelp">
+                <i class="el-icon-menu"></i>
+                <span>跑腿代办</span>
+              </el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>
       <el-main>
-        <router-view :key="$route.fullPath"></router-view>
+        <router-view></router-view>
       </el-main>
     </el-container>
   </el-container>
@@ -43,62 +48,9 @@
 export default {
   data () {
     return {
-      menulist: [
-        {
-          id: 125,
-          authName: '个人信息',
-          children: [
-            { id: 1, authName: '主页', path: 'userInfo' }
-          ]
-        },
-        {
-          id: 101,
-          authName: '交易记录',
-          children: [
-            { id: 3, authName: '二手交易', path: 'default' },
-            { id: 4, authName: '跑腿代办', path: 'default' }
-          ]
-        },
-        {
-          id: 102,
-          authName: '发帖记录',
-          children: [
-            { id: 1, authName: '二手交易', path: 'userPosted' },
-            { id: 2, authName: '跑腿代办', path: 'userPosted' }
-          ]
-        },
-        {
-          id: 145,
-          authName: '统计信息',
-          children: [
-            { id: 5, authName: '二手交易', path: 'default' },
-            { id: 6, authName: '跑腿代办', path: 'default' }
-          ]
-        },
-        {
-          id: 103,
-          authName: '设置中心',
-          children: [
-            { id: 7, authName: '账号管理', path: 'default' },
-            { id: 8, authName: '通用设置', path: 'default' },
-            { id: 9, authName: '帮助与反馈', path: 'default' }
-          ]
-        }
-      ],
-      iconsObj: {
-        125: 'el-icon-s-custom',
-        103: 'el-icon-lock',
-        101: 'el-icon-goods',
-        102: 'el-icon-document',
-        145: 'el-icon-s-data'
-      },
       isCollapse: false,
       user: ''
     }
-  },
-  created () {
-    this.getMenuList()
-    this.user = this.$route.params.user
   },
   methods: {
     logout () {
@@ -106,14 +58,7 @@ export default {
       this.$router.push('/login')
     },
     shouye () {
-      this.$router.push('/welcome/' + this.user)
-    },
-    // 获取所有菜单数据
-    async getMenuList () {
-      const { data: res } = await this.$http.get('menus')
-      if (res.meta.status !== 200) return this.$message.console.error(res.meta.msg)
-      this.menulist = res.data
-      console.log(res)
+      this.$router.push('/welcome')
     },
     // 点击按钮切换菜单折叠与展开
     toggleCollaspe () {

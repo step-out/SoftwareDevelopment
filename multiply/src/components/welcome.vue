@@ -8,14 +8,14 @@
         <div class="content">
             <div>
               <el-menu class="el-menu-demo" mode="horizontal" :router='true' :default-active="activePath">
-                <el-menu-item v-for="item in menuList" :index="'/' + item.path  + '/' + $route.params.user"
+                <el-menu-item v-for="item in menuList" :index="'/' + item.path"
                 :key="item.id" @click="saveNavState('/' + item.path)">
                   <span>{{item.serve_name}}</span>
                 </el-menu-item>
                 <el-menu-item @click="logout" style="float:right">
                   <span>退出</span>
                 </el-menu-item>
-                <el-menu-item style="float:right" @click="user">
+                <el-menu-item style="float:right" @click="usercenter">
                   <span>个人中心</span>
                 </el-menu-item>
               </el-menu>
@@ -54,8 +54,8 @@ export default {
       window.sessionStorage.setItem('activePath', activePath)
       this.activePath = activePath
     },
-    user () {
-      this.$router.push('/usercenter' + this.$route.params.user)
+    usercenter () {
+      this.$router.push('/usercenter')
     }
   }
 }

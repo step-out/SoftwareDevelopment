@@ -15,7 +15,7 @@
                         <el-button type="primary" @click="givesecondinfo()">确 定</el-button>
                     </div>
                 </el-dialog>
-                <div style="width: 90%; margin-top: 6%; margin-left: 5%; height:73%" >
+                <div style="width: 90%; margin-top: 6%; margin-left: 5%; height:65%" >
                     <div class="card" v-for="item in second" :key="item.id">
                         <div style="font-size:20px">{{ item.goods }}</div>
                         <div style="float:right">{{ item.user }}</div>
@@ -43,7 +43,7 @@
                         <el-button type="primary" @click="givehelpinfo()">确 定</el-button>
                     </div>
                 </el-dialog>
-                <div style="width: 90%; margin-top: 6%; margin-left: 5%; height:73%" >
+                <div style="width: 90%; margin-top: 6%; margin-left: 5%; height:65%" >
                     <div class="card" v-for="item in help" :key="item.id">
                         <div style="font-size:20px">{{ item.need }}</div>
                         <div style="float:right">{{ item.user }}</div>
@@ -98,16 +98,16 @@ export default ({
   methods: {
     // 获取内容
     async getsecondinfo () {
-      const { data: res } = await this.$http.post('life/getSecond', this.querysecondinfo)
+      const { data: res } = await this.$http.post('getSecond', this.querysecondinfo)
       if (res.status !== 200) return this.$message.console.error(res.message)
       this.second = res.data
-      this.secondtotal = res.totalpage
+      this.secondtotal = res.totalnum
     },
     async gethelpinfo () {
-      const { data: res } = await this.$http.post('life/getHelp', this.queryhelpinfo)
+      const { data: res } = await this.$http.post('getHelp', this.queryhelpinfo)
       if (res.status !== 200) return this.$message.console.error(res.message)
       this.help = res.data
-      this.helptotal = res.totalpage
+      this.helptotal = res.totalnum
     },
     // 监听页码值改变的事件
     handleCurrentChangesecond (newPage) {
@@ -122,7 +122,7 @@ export default ({
       const tokenStr = window.sessionStorage.getItem('token')
       const code = jwtDecode(tokenStr)
       this.putsecondinfo.user = code.username
-      const { data: res } = await this.$http.post('life/postSecond', this.putsecondinfo)
+      const { data: res } = await this.$http.post('postSecond', this.putsecondinfo)
       if (res.status !== 200) return this.$message.console.error(res.message)
       this.dialogFormVisiblesecond = false
       this.getsecondinfo()
@@ -131,7 +131,7 @@ export default ({
       const tokenStr = window.sessionStorage.getItem('token')
       const code = jwtDecode(tokenStr)
       this.puthelpinfo.user = code.username
-      const { data: res } = await this.$http.post('life/postHelp', this.puthelpinfo)
+      const { data: res } = await this.$http.post('postHelp', this.puthelpinfo)
       if (res.status !== 200) return this.$message.console.error(res.message)
       this.dialogFormVisiblehelp = false
       this.gethelpinfo()

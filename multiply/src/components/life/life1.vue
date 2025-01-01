@@ -119,6 +119,7 @@ export default ({
     top:5%;
     border-radius: 25px;
     background-color: rgba(192, 189, 189, 0.5);
+    overflow-y: auto;
 }
 
 .box-card {
