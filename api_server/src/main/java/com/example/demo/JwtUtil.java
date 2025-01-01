@@ -25,7 +25,7 @@ public class JwtUtil {
         map.put("typ", "JWT");
         String token = JWT.create()
                 .withHeader(map)
-                .withClaim("userName", user.getUsername())
+                .withClaim("username", user.getUsername())
                 .withClaim("password", user.getPassword())
                 .withExpiresAt(expireDate)
                 .withIssuedAt(new Date())

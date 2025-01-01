@@ -4,24 +4,20 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableId;
 
-@TableName("user")
-public class User {
+@TableName("second")
+public class Second {
 	@TableId(type=IdType.AUTO)
 	private Integer id;
-	private String username;
-	private String password;
-	private String phone;
+	private String goods;
+	private String user;
 	
 	public Integer getId() {
 		return id;
 	}
-	public String getUsername() {
-		return username;
+	public String getGoods() {
+		return goods;
 	}
-	public String getPassword() {
-		return password;
-	}
-	public String getPhone() {
-		return phone;
+	public String getUser() {
+		return user;
 	}
 }

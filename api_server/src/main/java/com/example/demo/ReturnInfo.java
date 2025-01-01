@@ -11,6 +11,7 @@ public class ReturnInfo {
 	private String message;
 	private String token;
 	private List data;
+	private Integer totalnum;
 	
 	public void setStatus(Integer status) {
 		this.status = status;
@@ -24,6 +25,9 @@ public class ReturnInfo {
 	public void setData(List data) {
 		this.data = data;
 	}
+	public void setTotalnum(Integer totalnum) {
+		this.totalnum = totalnum;
+	}
 	public Integer getStatus() {
 		return status;
 	}
@@ -35,5 +39,8 @@ public class ReturnInfo {
 	}
 	public List getData() {
 		return data;
+	}
+	public Integer getTotalnum() {
+		return totalnum;
 	}
 }
