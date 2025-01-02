@@ -11,6 +11,9 @@ public class Help {
 	private String need;
 	private String user;
 	
+	public Integer getId() {
+		return id;
+	}
 	public String getNeed() {
 		return need;
 	}

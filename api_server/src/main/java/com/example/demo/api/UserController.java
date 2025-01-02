@@ -1,18 +1,14 @@
 package com.example.demo.api;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.tables.User;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.ArrayList;
-
 import com.example.demo.ReturnInfo;
 import com.example.demo.JwtUtil;
 
@@ -121,6 +117,34 @@ public class UserController {
 		}
 		else {
 			res.setMessage("修改失败");
+		}
+		return res;
+	}
+	
+	@GetMapping("/getusers")
+	public ReturnInfo getusers() {
+		ReturnInfo res = new ReturnInfo();
+		List<User> result = mapper.getAllUser();
+		if(result != null) {
+			res.setData(result);
+			res.setStatus(200);
+			res.setMessage("获取成功");
+		}
+		else {
+			res.setMessage("获取失败");
+		}
+		return res;
+	}
+	
+	@PostMapping("/deleteuser")
+	public ReturnInfo deleteuser(@RequestBody User user) {
+		ReturnInfo res = new ReturnInfo();
+		if(mapper.delete(user) == 1) {
+			res.setStatus(200);
+			res.setMessage("删除成功");
+		}
+		else {
+			res.setMessage("删除失败");
 		}
 		return res;
 	}

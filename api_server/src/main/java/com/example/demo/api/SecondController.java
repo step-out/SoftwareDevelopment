@@ -1,20 +1,15 @@
 package com.example.demo.api;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import com.example.demo.mapper.SecondMapper;
 import com.example.demo.tables.Second;
 import com.example.demo.tables.User;
 import javax.annotation.Resource;
 import java.util.List;
-
 import com.example.demo.ReturnInfo;
-import com.example.demo.JwtUtil;
 import com.example.demo.Query;
 
 @RestController
@@ -61,7 +56,7 @@ public class SecondController {
 		return res;
 	}
 	
-	@PostMapping("editsecond")
+	@PostMapping("editSecond")
 	public ReturnInfo editsecond(@RequestBody Second second) {
 		ReturnInfo res = new ReturnInfo();
 		if(mapper.edit(second) == 1) {
@@ -72,7 +67,7 @@ public class SecondController {
 		return res;
 	}
 	
-	@PostMapping("deletesecond")
+	@PostMapping("deleteSecond")
 	public ReturnInfo deletesecond(@RequestBody Second second) {
 		ReturnInfo res = new ReturnInfo();
 		if(mapper.delete(second) == 1) {
@@ -80,6 +75,18 @@ public class SecondController {
 			res.setMessage("删除成功");
 		}
 		else res.setMessage("删除失败，请稍后再试");
+		return res;
+	}
+	
+	@GetMapping("getAllSecond")
+	public ReturnInfo getAllSecond() {
+		ReturnInfo res = new ReturnInfo();
+		List<Second> result = mapper.getAll();
+		if(result != null) {
+			res.setData(result);
+			res.setStatus(200);
+			res.setMessage("获取二手交易成功");
+		}
 		return res;
 	}
 }

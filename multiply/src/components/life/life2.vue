@@ -6,7 +6,7 @@
             <br>
             <div class="container">
                 <div class="box-card">二手交易</div>
-                <el-button type="text" style="float:right;font-size:20px;margin-right:30px" @click="dialogFormVisiblesecond = true">发布</el-button>
+                <el-button type="text" style="float:right; font-size:20px; margin-right:30px;" @click="dialogFormVisiblesecond = true">发布</el-button>
                 <el-dialog :visible.sync="dialogFormVisiblesecond" width="40%" :modal="false">
                     <el-form :model="putsecondinfo">
                         <el-input v-model="putsecondinfo.goods" :rows="3" type="textarea" autocomplete="off"></el-input>
@@ -15,7 +15,7 @@
                         <el-button type="primary" @click="givesecondinfo()">确 定</el-button>
                     </div>
                 </el-dialog>
-                <div style="width: 90%; margin-top: 6%; margin-left: 5%; height:65%" >
+                <div style="width: 90%; margin-top: 6%; margin-left: 5%; height:60%; overflow: auto;" >
                     <div class="card" v-for="item in second" :key="item.id">
                         <div style="font-size:20px">{{ item.goods }}</div>
                         <div style="float:right">{{ item.user }}</div>
@@ -25,7 +25,7 @@
                 <!-- 分页 -->
                 <el-pagination @current-change="handleCurrentChangesecond"
                 :current-page="querysecondinfo.pagenum" :page-size="querysecondinfo.pagesize"
-                layout="total, prev, pager, next, jumper" :total="secondtotal">
+                layout="total, prev, pager, next, jumper" :total="secondtotal" style="margin-top: 2%">
                 </el-pagination>
             </div>
         </el-col>
@@ -34,7 +34,7 @@
             <br>
             <div class="container">
                 <div class="box-card">跑腿代办</div>
-                <el-button type="text" style="float:right;font-size:20px;margin-right:30px" @click="dialogFormVisiblehelp = true">发布</el-button>
+                <el-button type="text" style="float:right; font-size:20px; margin-right:30px" @click="dialogFormVisiblehelp = true">发布</el-button>
                 <el-dialog :visible.sync="dialogFormVisiblehelp" width="40%" :modal="false">
                     <el-form :model="puthelpinfo">
                         <el-input v-model="puthelpinfo.need" :rows="3" type="textarea" autocomplete="off"></el-input>
@@ -43,7 +43,7 @@
                         <el-button type="primary" @click="givehelpinfo()">确 定</el-button>
                     </div>
                 </el-dialog>
-                <div style="width: 90%; margin-top: 6%; margin-left: 5%; height:65%" >
+                <div style="width: 90%; margin-top: 6%; margin-left: 5%; height:60%; overflow: auto;" >
                     <div class="card" v-for="item in help" :key="item.id">
                         <div style="font-size:20px">{{ item.need }}</div>
                         <div style="float:right">{{ item.user }}</div>
@@ -53,7 +53,7 @@
                 <!-- 分页 -->
                 <el-pagination @current-change="handleCurrentChangehelp"
                 :current-page="queryhelpinfo.pagenum" :page-size="queryhelpinfo.pagesize"
-                layout="total, prev, pager, next, jumper" :total="helptotal">
+                layout="total, prev, pager, next, jumper" :total="helptotal" style="margin-top: 2%">
                 </el-pagination>
             </div>
         </el-col>
@@ -170,7 +170,6 @@ export default ({
 }
 
 .card {
-    height: 20%;
     width: 80%;
     margin-left: 10%;
 }

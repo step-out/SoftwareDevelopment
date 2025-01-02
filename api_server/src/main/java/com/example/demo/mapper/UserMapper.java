@@ -5,8 +5,10 @@ import com.example.demo.tables.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Update;
+import java.util.List;
 
 @Mapper
 public interface UserMapper extends BaseMapper<User>{
@@ -22,9 +24,15 @@ public interface UserMapper extends BaseMapper<User>{
 	@Select("SELECT * from user where username = #{username}")
 	User getUserByUsername(@Param("username") String username);
 	
+	@Select("SELECT * from user")
+	List<User> getAllUser();
+	
 	@Insert("INSERT into user (username, password, phone) values (#{username}, #{password}, #{phone})")
 	int insertUser(User user);
 	
 	@Update("UPDATE user set username = #{username}, password = #{password}, phone = #{phone} WHERE id = #{id}")
 	int updateUser(User user);
+	
+	@Delete("DELETE from user WHERE id = #{id}")
+	int delete(User user);
 }

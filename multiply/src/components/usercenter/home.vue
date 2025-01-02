@@ -48,8 +48,7 @@
 export default {
   data () {
     return {
-      isCollapse: false,
-      user: ''
+      isCollapse: false
     }
   },
   methods: {

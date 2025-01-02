@@ -11,8 +11,9 @@ import UserInfo from '../components/usercenter/userInfo.vue'
 import UserSecond from '../components/usercenter/postedSecond.vue'
 import UserHelp from '../components/usercenter/postedHelp.vue'
 import Manage from '../components/manager/manage.vue'
-import Canteen from '../components/manager/canteen-management.vue'
-import Secondhand from '../components/manager/secondhand-management.vue'
+import Canteen from '../components/manager/canteen-manage.vue'
+import Second from '../components/manager/second-manage.vue'
+import Help from '../components/manager/help-manage.vue'
 import UserManage from '../components/manager/user-manage.vue'
 
 Vue.use(VueRouter)
@@ -40,22 +41,15 @@ const router = new VueRouter({
         { path: '/postedhelp', component: UserHelp }
       ]
     },
-    // 新增路由
     {
       path: '/manage',
-      component: Manage
-    },
-    {
-      path: '/canteen',
-      component: Canteen
-    },
-    {
-      path: '/secondhand',
-      component: Secondhand
-    },
-    {
-      path: '/usermanage',
-      component: UserManage
+      component: Manage,
+      children: [
+        { path: '/canteen', component: Canteen },
+        { path: '/second', component: Second },
+        { path: '/help', component: Help },
+        { path: '/usermanage', component: UserManage }
+      ]
     }
   ]
 })

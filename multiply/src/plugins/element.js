@@ -5,7 +5,8 @@ import {
   Footer, Main, Menu, Submenu, MenuItem,
   Card, Row, Col, Avatar, Carousel,
   CarouselItem, Table, TableColumn, Pagination, Dialog,
-  Divider, InfiniteScroll, Empty
+  Divider, InfiniteScroll, Empty, Dropdown, DropdownMenu,
+  DropdownItem
 } from 'element-ui'
 
 Vue.use(Button)
@@ -34,3 +35,6 @@ Vue.use(Dialog)
 Vue.use(Divider)
 Vue.use(InfiniteScroll)
 Vue.use(Empty)
+Vue.use(Dropdown)
+Vue.use(DropdownMenu)
+Vue.use(DropdownItem)

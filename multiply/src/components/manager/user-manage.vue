@@ -1,63 +1,69 @@
+ <!-- 用户管理内容 -->
 <template>
-  <div>
-    <!-- 用户管理内容 -->
-    <el-row style="height:100%; width:100%">
-      <el-col :span="24">
-        <div class="container">
-          <el-card class="box-card" :body-style="{ padding: '10px' }">
-            <div class="card-title">用户管理</div>
-
-            <!-- 用户表格 -->
-            <el-table :data="users" stripe style="width: 100%" :show-header="true">
-              <el-table-column label="用户名" prop="username" width="150" align="center"></el-table-column>
-              <el-table-column label="手机号" prop="phone" width="200" align="center">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.phone" size="mini" placeholder="请输入手机号"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="密码" prop="password" width="200" align="center">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.password" size="mini" type="password" placeholder="请输入密码"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" width="200" align="center">
-                <template slot-scope="scope">
-                  <!-- 修改按钮 -->
-                  <el-button type="primary" size="mini" @click="updateUser(scope.row)">修改</el-button>
-                  <!-- 删除按钮 -->
-                  <el-button type="danger" size="mini" @click="deleteUser(scope.row)">删除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-
-            <!-- 添加用户按钮 -->
-            <el-button type="success" @click="showAddDialog">添加用户</el-button>
-          </el-card>
-        </div>
+  <div class="container">
+    <el-row height="10%" :gutter="17">
+      <el-col :span="11">
+        <el-input placeholder='请输入用户名搜索' v-model='searchUsername' clearable @keyup.enter='searchByUsername'>
+          <el-button slot='append' icon='el-icon-search' @click='searchByUsername'></el-button>
+        </el-input>
+      </el-col>
+      <el-col :span="11">
+        <el-input placeholder='请输入手机号搜索' v-model='searchPhone' clearable @keyup.enter='searchByPhone'>
+          <el-button slot='append' icon='el-icon-search' @click='searchByPhone'></el-button>
+        </el-input>
+      </el-col>
+      <el-col :span="2">
+        <!-- 添加用户按钮 -->
+        <el-button type="success" size="small" @click="showAddDialog">添加用户</el-button>
+        <!-- 添加用户对话框 -->
+        <el-dialog title="添加新用户" :visible.sync="AddDialogVisible" width="40%" :modal="false">
+          <el-form :model="newUser" ref="add_form" :rules="FormRules" label-width="100px">
+            <el-form-item label="用户名" prop="username">
+              <el-input v-model="newUser.username" placeholder="请输入用户名"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="password">
+              <el-input v-model="newUser.password" placeholder="请输入密码" type="password"></el-input>
+            </el-form-item>
+            <el-form-item label="手机号" prop="phone">
+              <el-input v-model="newUser.phone" placeholder="请输入手机号"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="addUser">确定</el-button>
+          </div>
+        </el-dialog>
       </el-col>
     </el-row>
-
-    <!-- 返回管理中心按钮 -->
-    <el-button class="back-btn" type="primary" @click="goToManage">返回管理中心</el-button>
-
-    <!-- 添加用户对话框 -->
-    <el-dialog title="添加新用户" :visible.sync="dialogVisible" width="400px">
-      <el-form :model="newUser" ref="form" label-width="100px">
-        <el-form-item label="用户名" prop="username" :rules="[{ required: true, message: '请输入用户名', trigger: 'blur' }]">
-          <el-input v-model="newUser.username" placeholder="请输入用户名"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password" :rules="[{ required: true, message: '请输入密码', trigger: 'blur' }]">
-          <el-input v-model="newUser.password" placeholder="请输入密码" type="password"></el-input>
-        </el-form-item>
-        <el-form-item label="手机号" prop="phone" :rules="[{ required: true, message: '请输入手机号', trigger: 'blur' }]">
-          <el-input v-model="newUser.phone" placeholder="请输入手机号"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="addUser">确定</el-button>
-      </div>
-    </el-dialog>
+    <!-- 用户表格 -->
+    <el-table :data="filteredUsers" stripe style="width: 100%" :show-header="true"  height="580" overflow: auto>
+      <el-table-column label="用户名" prop="username" width="290" align="center"></el-table-column>
+      <el-table-column label="手机号" prop="phone" width="290" align="center"></el-table-column>
+      <el-table-column label="密码" prop="password" width="290" align="center"></el-table-column>
+      <el-table-column label="操作" align="center">
+        <template slot-scope="scope">
+          <el-dialog title="修改用户信息" :visible.sync="EditDialogVisible" width="40%" :modal="false">
+            <el-form :model="newUser" ref="edit_form" :rules="FormRules" label-width="100px">
+              <el-form-item label="用户名" prop="username">
+                <el-input v-model="newUser.username" placeholder="请输入用户名"></el-input>
+              </el-form-item>
+              <el-form-item label="密码" prop="password">
+                <el-input v-model="newUser.password" placeholder="请输入密码" type="password" :show-password="true"></el-input>
+              </el-form-item>
+              <el-form-item label="手机号" prop="phone">
+                <el-input v-model="newUser.phone" placeholder="请输入手机号"></el-input>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button type="primary" @click="save()">确定</el-button>
+            </div>
+          </el-dialog>
+          <!-- 修改按钮 -->
+          <el-button type="primary" size="mini" @click="editUser(scope.row)">修改</el-button>
+          <!-- 删除按钮 -->
+          <el-button type="danger" size="mini" @click="deleteUser(scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
@@ -65,85 +71,109 @@
 export default {
   data () {
     return {
-      users: [], // 用户列表
-      dialogVisible: false, // 控制添加用户对话框的显示
+      users: [],
+      filteredUsers: [],
+      EditDialogVisible: false,
+      AddDialogVisible: false,
+      oldUser: {
+        username: '',
+        password: '',
+        phone: ''
+      },
       newUser: {
         username: '',
         password: '',
         phone: ''
+      },
+      searchUsername: '',
+      searchPhone: '',
+      FormRules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { min: 1, max: 8, message: '长度在 1 到 8 个字符', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
+        ],
+        phone: [
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+          { pattern: /^1[3|4|5|7|8][0-9]{9}$/, message: '请输入正确的手机号', trigger: 'blur' }
+        ]
       }
     }
   },
   created () {
-    this.fetchUsers()
+    this.getUsers()
   },
   methods: {
     // 获取当前用户列表
-    async fetchUsers () {
-      try {
-        const response = await this.$http.get('/api/users')// 请求用户列表
-        if (response.status === 200) {
-          this.users = response.data
-        }
-      } catch (error) {
-        this.$message.error('获取用户列表失败')
+    async getUsers () {
+      const { data: res } = await this.$http.get('getusers')
+      if (res.status !== 200) return this.$message.console.error(res.message)
+      this.users = res.data
+      this.filteredUsers = this.users
+    },
+    searchByUsername () {
+      if (this.searchUsername.trim() === '') {
+        this.filteredUsers = this.users
+      } else {
+        this.filteredUsers = this.users.filter((users) => {
+          return (
+            users.username.includes(this.searchUsername)
+          )
+        })
       }
     },
-
-    // 修改用户信息（密码和手机号）
-    async updateUser (user) {
-      try {
-        const response = await this.$http.post('/api/users/update', user)
-        if (response.status === 200) {
-          this.$message.success('用户信息修改成功')
-        }
-      } catch (error) {
-        this.$message.error('修改失败')
+    searchByPhone () {
+      if (this.searchPhone.trim() === '') {
+        this.filteredUsers = this.users
+      } else {
+        this.filteredUsers = this.users.filter((users) => {
+          return (
+            users.phone.includes(this.searchPhone)
+          )
+        })
       }
     },
-
-    // 删除用户
+    editUser (user) {
+      this.EditDialogVisible = true
+      this.newUser = { ...user }
+      this.oldUser = { ...user }
+    },
+    async save () {
+      this.$refs.edit_form.validate(async valid => {
+        if (!valid) return
+        const { data: res } = await this.$http.post('edituser', [this.oldUser, this.newUser]) // 更新个人信息
+        if (res.status !== 200) return this.$message.error(res.message)
+        this.$message.success('修改成功！')
+        this.EditDialogVisible = false
+        this.getUsers()
+      })
+    },
     async deleteUser (user) {
-      try {
-        const response = await this.$http.post('/api/users/delete', { id: user.id })
-        if (response.status === 200) {
-          const index = this.users.indexOf(user)
-          if (index !== -1) {
-            this.users.splice(index, 1)
-          }
-          this.$message.success('用户删除成功')
-        }
-      } catch (error) {
-        this.$message.error('删除失败')
-      }
+      const { data: res } = await this.$http.post('deleteuser', user)
+      if (res.status !== 200) return this.$message.error(res.message)
+      this.$message.success('删除成功！')
+      this.getUsers()
     },
-
-    // 打开添加用户对话框
     showAddDialog () {
-      this.dialogVisible = true
+      this.AddDialogVisible = true
       this.newUser = {
         username: '',
         password: '',
         phone: ''
       }
     },
-
-    // 添加新用户
     async addUser () {
-      try {
-        const response = await this.$http.post('/api/users/add', this.newUser)
-        if (response.status === 200) {
-          this.users.push(response.data)
-          this.dialogVisible = false
-          this.$message.success('添加用户成功')
-        }
-      } catch (error) {
-        this.$message.error('添加失败')
-      }
-    },
-
-    goToManage () {
-      this.$router.push('/manage') // 管理中心页面的路由
+      this.$refs.add_form.validate(async valid => {
+        if (!valid) return
+        const { data: res } = await this.$http.post('reguser', this.newUser)
+        if (res.status !== 200) return this.$message.error(res.message)
+        this.$message.success('添加成功！')
+        this.AddDialogVisible = false
+        this.getUsers()
+      })
     }
   }
 }
@@ -151,7 +181,8 @@ export default {
 
 <style scoped>
 .container {
-  margin-top: 20px;
+  height: 100%;
+  width: 100%;
 }
 
 .box-card {

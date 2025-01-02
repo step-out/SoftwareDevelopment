@@ -8,25 +8,25 @@
                 <el-row style="height:100%; width:100%">
                     <el-col style="height:100%" :span="6">
                         <div class="box-card">南光餐厅</div>
-                        <el-table :data="nanguang" stripe style="width: 90%; margin-top: 20%; margin-left: 5%" height="300" :show-header="false">
+                        <el-table :data="nanguang" stripe style="width: 90%; margin-top: 20%; margin-left: 5%; overflow: auto" height="300" :show-header="false">
                             <el-table-column prop="menu" align="center"></el-table-column>
                         </el-table>
                     </el-col>
                     <el-col style="height:100%" :span="6">
                         <div class="box-card">芙蓉餐厅</div>
-                        <el-table :data="furong" stripe style="width: 90%; margin-top: 20%; margin-left: 5%" height="300" :show-header="false">
+                        <el-table :data="furong" stripe style="width: 90%; margin-top: 20%; margin-left: 5%; overflow: auto" height="300" :show-header="false">
                             <el-table-column prop="menu" align="center"></el-table-column>
                         </el-table>
                     </el-col>
                     <el-col style="height:100%" :span="6">
                         <div class="box-card">勤业餐厅</div>
-                        <el-table :data="qinye" stripe style="width: 90%; margin-top: 20%; margin-left: 5%" height="300" :show-header="false">
+                        <el-table :data="qinye" stripe style="width: 90%; margin-top: 20%; margin-left: 5%; overflow: auto" height="300" :show-header="false">
                             <el-table-column prop="menu" align="center"></el-table-column>
                         </el-table>
                     </el-col>
                     <el-col style="height:100%" :span="6">
                         <div class="box-card">东苑餐厅</div>
-                        <el-table :data="dongyuan" stripe style="width: 90%; margin-top: 20%; margin-left: 5%" height="300" :show-header="false">
+                        <el-table :data="dongyuan" stripe style="width: 90%; margin-top: 20%; margin-left: 5%; overflow: auto" height="300" :show-header="false">
                             <el-table-column prop="menu" align="center"></el-table-column>
                         </el-table>
                     </el-col>
@@ -40,19 +40,19 @@
                 <el-row style="height:100%; width:100%">
                     <el-col style="height:100%" :span="8">
                         <div class="box-card">竞丰餐厅</div>
-                        <el-table :data="jingfeng" stripe style="width: 90%; margin-top: 20%; margin-left: 5%" height="300" :show-header="false">
+                        <el-table :data="jingfeng" stripe style="width: 90%; margin-top: 20%; margin-left: 5%; overflow: auto" height="300" :show-header="false">
                             <el-table-column prop="menu" align="center"></el-table-column>
                         </el-table>
                     </el-col>
                     <el-col style="height:100%" :span="8">
                         <div class="box-card">丰庭餐厅</div>
-                        <el-table :data="fengting" stripe style="width: 90%; margin-top: 20%; margin-left: 5%" height="300" :show-header="false">
+                        <el-table :data="fengting" stripe style="width: 90%; margin-top: 20%; margin-left: 5%; overflow: auto" height="300" :show-header="false">
                             <el-table-column prop="menu" align="center"></el-table-column>
                         </el-table>
                     </el-col>
                     <el-col style="height:100%" :span="8">
                         <div class="box-card">思源餐厅</div>
-                        <el-table :data="siyuan" stripe style="width: 90%; margin-top: 20%; margin-left: 5%" height="300" :show-header="false">
+                        <el-table :data="siyuan" stripe style="width: 90%; margin-top: 20%; margin-left: 5%; overflow: auto" height="300" :show-header="false">
                             <el-table-column prop="menu" align="center"></el-table-column>
                         </el-table>
                     </el-col>
@@ -66,6 +66,7 @@
 export default ({
   data () {
     return {
+      menus: [],
       nanguang: [],
       furong: [],
       qinye: [],
@@ -76,35 +77,49 @@ export default ({
     }
   },
   created () {
-    this.getinfo1()
-    this.getinfo2()
+    this.getMenus()
   },
   methods: {
     // 获取内容
-    async getinfo1 () {
-      const { data: res1 } = await this.$http.get('menu/getNanguang')
-      if (res1.status !== 200) return this.$message.console.error(res1.message)
-      this.nanguang = res1.data
-      const { data: res2 } = await this.$http.get('menu/getFurong')
-      if (res2.status !== 200) return this.$message.console.error(res2.message)
-      this.furong = res2.data
-      const { data: res3 } = await this.$http.get('menu/getQinye')
-      if (res3.status !== 200) return this.$message.console.error(res3.message)
-      this.qinye = res3.data
-      const { data: res4 } = await this.$http.get('menu/getDongyuan')
-      if (res4.status !== 200) return this.$message.console.error(res4.message)
-      this.dongyuan = res4.data
-    },
-    async getinfo2 () {
-      const { data: res5 } = await this.$http.get('menu/getJingfeng')
-      if (res5.status !== 200) return this.$message.console.error(res5.message)
-      this.jingfeng = res5.data
-      const { data: res6 } = await this.$http.get('menu/getFengting')
-      if (res6.status !== 200) return this.$message.console.error(res6.message)
-      this.fengting = res6.data
-      const { data: res7 } = await this.$http.get('menu/getSiyuan')
-      if (res7.status !== 200) return this.$message.console.error(res7.message)
-      this.siyuan = res7.data
+    async getMenus () {
+      const { data: res } = await this.$http.get('menu/getAll')
+      if (res.status !== 200) return this.$message.console.error(res.message)
+      this.menus = res.data
+      this.nanguang = this.menus.filter((menus) => {
+        return (
+          menus.belong.includes('南光')
+        )
+      })
+      this.furong = this.menus.filter((menus) => {
+        return (
+          menus.belong.includes('芙蓉')
+        )
+      })
+      this.qinye = this.menus.filter((menus) => {
+        return (
+          menus.belong.includes('勤业')
+        )
+      })
+      this.dongyuan = this.menus.filter((menus) => {
+        return (
+          menus.belong.includes('东苑')
+        )
+      })
+      this.jingfeng = this.menus.filter((menus) => {
+        return (
+          menus.belong.includes('竞丰')
+        )
+      })
+      this.fengting = this.menus.filter((menus) => {
+        return (
+          menus.belong.includes('丰庭')
+        )
+      })
+      this.siyuan = this.menus.filter((menus) => {
+        return (
+          menus.belong.includes('思源')
+        )
+      })
     }
   }
 })
@@ -119,7 +134,6 @@ export default ({
     top:5%;
     border-radius: 25px;
     background-color: rgba(192, 189, 189, 0.5);
-    overflow-y: auto;
 }
 
 .box-card {

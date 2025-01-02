@@ -9,16 +9,22 @@
     <el-main class="main-container">
       <!-- 发帖信息 -->
       <!-- 如果文本列表为空，显示提示文字 -->
-      <div v-if="tradeRecords.length === 0">
+      <div v-if="records.length === 0">
         <el-empty description="暂无数据"></el-empty>
       </div>
       <div v-else v-for="record in filteredRecords" :key=record.id>
         <el-card shadow="hover" class="box-card">
-          <div slot="header" class="clearfix">
-            <el-button style="float: right; padding: 3px 0" type="text" @click="deleteRecord(record)">删除</el-button>
-            <el-button style="float: right; padding: 3px 0; margin-right: 5px" type="text" @click="editRecord(record)">修改</el-button>
-          </div>
-          <div class="text-content">{{ record.goods }}</div>
+          <el-row style="height:100%; width:100%; isplay: flex; justify-content: space-between; align-items: center;">
+            <el-col style="isplay: flex; justify-content: space-between; align-items: center;" :span="22">
+              {{record.goods}}
+            </el-col>
+            <el-col :span="1">
+              <el-button style="float: right" type="text" @click="editRecord(record)">修改</el-button>
+            </el-col>
+            <el-col :span="1">
+              <el-button style="float: right" type="text" @click="deleteRecord(record)">删除</el-button>
+            </el-col>
+          </el-row>
         </el-card>
       </div>
     </el-main>
@@ -39,16 +45,14 @@ import jwtDecode from 'jwt-decode'
 export default {
   data () {
     return {
-      tradeRecords: [], // 所有记录
+      records: [], // 所有记录
       filteredRecords: [], // 搜索筛选后的记录
       searchKeyword: '', // 存储搜索关键词
       editDialogVisible: false,
       editRecordForm: {
         id: '',
         goods: ''
-      },
-      user: this.$route.params.user,
-      recordType: this.$route.params.id
+      }
     }
   },
   created () {
@@ -62,17 +66,17 @@ export default {
       // 获取与我(user)相关的交易记录
       const { data: res } = await this.$http.post('getUserSecond', { username: code.username })
       if (res.status !== 200) return this.$message.console.error(res.message)
-      this.tradeRecords = res.data
-      this.filteredRecords = this.tradeRecords
+      this.records = res.data
+      this.filteredRecords = this.records
     },
     searchRecords () {
       // 如果搜索关键词为空，显示全部记录
       if (this.searchKeyword.trim() === '') {
-        this.filteredRecords = this.tradeRecords
+        this.filteredRecords = this.records
       } else { // 根据关键词过滤交易记录
-        this.filteredRecords = this.tradeRecords.filter((record) => {
+        this.filteredRecords = this.records.filter((record) => {
           return (
-            record.text.includes(this.searchKeyword)
+            record.goods.includes(this.searchKeyword)
           )
         })
       }
@@ -83,7 +87,7 @@ export default {
       this.editRecordForm = { ...record }
     },
     async save () {
-      const { data: res } = await this.$http.post('editsecond', this.editRecordForm)
+      const { data: res } = await this.$http.post('editSecond', this.editRecordForm)
       if (res.status !== 200) return this.$message.error(res.message)
       this.$message.success('修改成功！')
       this.editDialogVisible = false
@@ -91,7 +95,7 @@ export default {
       this.searchRecords()
     },
     async deleteRecord (record) {
-      const { data: res } = await this.$http.post('deletesecond', record)
+      const { data: res } = await this.$http.post('deleteSecond', record)
       if (res.status !== 200) return this.$message.error(res.message)
       this.$message.success('删除成功！')
       this.getData()
@@ -113,20 +117,11 @@ export default {
 }
 
 .main-container {
-  min-height: 90%;
-  overflow-y: auto; /* 当内容在垂直方向（y轴）超出容器高度时，自动出现滚动条 */
+  height: 90%;
+  overflow-y: auto;
 }
 
 .box-card {
   margin-top: 10px;
-}
-
-.clearfix:before,
-.clearfix:after {
-  display: table;
-  content: "";
-}
-.clearfix:after {
-  clear: both
 }
 </style>

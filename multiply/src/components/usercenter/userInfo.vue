@@ -11,7 +11,7 @@
         <el-form-item label="用户名">
           <span>{{info.username}}</span>
         </el-form-item>
-        <el-form-item label="密码">
+        <el-form-item label="密码" type="password">
           <span>{{info.password}}</span>
         </el-form-item>
         <el-form-item label="电话号码">
@@ -21,7 +21,7 @@
     </el-card>
     <!-- 修改个人信息 -->
     <el-dialog title="修改个人信息" :visible.sync="dialogVisible" width="40%" :modal="false">
-      <el-form :model="newinfo">
+      <el-form :model="newinfo" ref="form" :rules="FormRules">
         <!-- 用户名 -->
         <el-form-item prop="username">
           <el-input
@@ -74,7 +74,21 @@ export default {
         password: '',
         phone: ''
       },
-      dialogVisible: false
+      dialogVisible: false,
+      FormRules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { min: 1, max: 8, message: '长度在 1 到 8 个字符', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
+        ],
+        phone: [
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+          { pattern: /^1[3|4|5|7|8][0-9]{9}$/, message: '请输入正确的手机号', trigger: 'blur' }
+        ]
+      }
     }
   },
   created () {
@@ -96,10 +110,14 @@ export default {
       this.newinfo = { ...this.info }
     },
     async save () {
-      const { data: res } = await this.$http.post('edituser', [this.info, this.newinfo]) // 更新个人信息
-      if (res.status !== 200) return this.$message.error(res.message)
-      this.$message.success('修改成功！')
-      this.dialogVisible = false
+      this.$refs.form.validate(async valid => {
+        if (!valid) return
+        const { data: res } = await this.$http.post('edituser', [this.info, this.newinfo]) // 更新个人信息
+        if (res.status !== 200) return this.$message.error(res.message)
+        this.$message.success('修改成功！')
+        this.dialogVisible = false
+        this.getuserinfo()
+      })
     }
   }
 }

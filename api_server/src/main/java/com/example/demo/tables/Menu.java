@@ -11,6 +11,9 @@ public class Menu {
 	private String menu;
 	private String belong;
 	
+	public Integer getId() {
+		return id;
+	}
 	public String getMenu() {
 		return menu;
 	}
